@@ -1,37 +1,427 @@
-local decalsyeeted = true -- Leaving this on makes games look shitty but the fps goes up by at least 20.
-local g = game
-local w = g.Workspace
-local l = g.Lighting
-local t = w.Terrain
-t.WaterWaveSize = 0
-t.WaterWaveSpeed = 0
-t.WaterReflectance = 0
-t.WaterTransparency = 0
-l.GlobalShadows = false
-l.FogEnd = 9e9
-l.Brightness = 0
-settings().Rendering.QualityLevel = "Level01"
-for i, v in pairs(g:GetDescendants()) do
-    if v:IsA("Part") or v:IsA("Union") or v:IsA("CornerWedgePart") or v:IsA("TrussPart") then
-        v.Material = "Plastic"
-        v.Reflectance = 0
-    elseif v:IsA("Decal") or v:IsA("Texture") and decalsyeeted then
-        v.Transparency = 1
-    elseif v:IsA("ParticleEmitter") or v:IsA("Trail") then
-        v.Lifetime = NumberRange.new(0)
-    elseif v:IsA("Explosion") then
-        v.BlastPressure = 1
-        v.BlastRadius = 1
-    elseif v:IsA("Fire") or v:IsA("SpotLight") or v:IsA("Smoke") or v:IsA("Sparkles") then
-        v.Enabled = false
-    elseif v:IsA("MeshPart") then
-        v.Material = "Plastic"
-        v.Reflectance = 0
-        v.TextureID = 10385902758728957
-    end
-end
-for i, e in pairs(l:GetChildren()) do
-    if e:IsA("BlurEffect") or e:IsA("SunRaysEffect") or e:IsA("ColorCorrectionEffect") or e:IsA("BloomEffect") or e:IsA("DepthOfFieldEffect") then
-        e.Enabled = false
-    end
-end
+--[[
+
+░██████╗██╗░░██╗██╗░░██╗██╗░░██╗██╗░░██╗  ██╗░░░██╗░░░██████╗░██████╗░
+██╔════╝██║░░██║██║░░██║██║░░██║██║░░██║  ██║░░░██║░░░╚════██╗╚════██╗
+╚█████╗░███████║███████║███████║███████║  ╚██╗░██╔╝░░░░░███╔═╝░░███╔═╝
+░╚═══██╗██╔══██║██╔══██║██╔══██║██╔══██║  ░╚████╔╝░░░░██╔══╝░░██╔══╝░░
+██████╔╝██║░░██║██║░░██║██║░░██║██║░░██║  ░░╚██╔╝░░██╗███████╗███████╗
+╚═════╝░╚═╝░░╚═╝╚═╝░░╚═╝╚═╝░░╚═╝╚═╝░░╚═╝  ░░░╚═╝░░░╚═╝╚══════╝╚══════╝
+
+██╗░░░██╗██████╗░██████╗░░█████╗░████████╗███████╗
+██║░░░██║██╔══██╗██╔══██╗██╔══██╗╚══██╔══╝██╔════╝
+██║░░░██║██████╔╝██║░░██║███████║░░░██║░░░█████╗░░
+██║░░░██║██╔═══╝░██║░░██║██╔══██║░░░██║░░░██╔══╝░░
+╚██████╔╝██║░░░░░██████╔╝██║░░██║░░░██║░░░███████╗
+░╚═════╝░╚═╝░░░░░╚═════╝░╚═╝░░╚═╝░░░╚═╝░░░╚══════╝
+
+
+https://discord.gg/shhhh
+https://shhhh.lol
+
+--]]
+
+
+
+getgenv().Shhhh = {
+    ['Options'] = {
+        Key = 'OhZphTIpgRJmXUFvzToeconPkeNqlQJr', -- [ replace [keyhere] with your key ]
+        Version = 'V2.0', -- [ V2.1 has the best resolver in the game ) ( V2.0 hits the most and still has a good resolver ( recommended ) ]
+        Intro = true, -- [ stars a intro ]
+        ['UnlockFps'] = {
+            Enabled = true, -- [ basically fps unlocker ]
+            FpsCap = 999,
+        },
+        ['CustomTextures'] = {
+            Enabled = false, -- [ to have textures like ForceField world etc ]
+            Texture = 'ForceField', -- [ https://static.wikia.nocookie.net/roblox/images/c/c1/All_Materials_2022.png/revision/latest?cb=20221125005730 ]
+            Color = Color3.fromRGB(255, 198, 254),
+            ['Fog'] = {
+                Enabled = false,
+                Start = 0,
+                End = 1000,
+                Color = BrickColor.new("Light reddish violet"), -- [ https://robloxapi.github.io/ref/type/BrickColor.html ]
+            },
+        },
+    },
+    ['Panic'] = {
+        Enabled = false,
+        Key = 'K', -- // turns everything OFF/ON
+    },
+    ['Universal'] = {
+      Enabled = false, -- // turn this off if you're gonna play DA HOOD
+      TeamCheck = true, -- // turn this off if the game is free for all
+      VisibleCheck = true,
+      Use_HitChance = true,
+      Visible = true, --  // Visible / Show Fov
+      Predict = false,
+      Prediction = 0.115,
+      Size = 150, -- // Fov Size
+      HitChance = 100,
+      HitPart = 'Random', -- // Head, HumanoidRootPart, Random
+    },
+    ['Silent'] = {
+        Enabled = true,
+        Mode = 'FOV', -- // FOV or Target
+        Enable_KeyBind = true,
+        KeyBind = '=',
+        Notification = true,
+        Predict = true,
+        Prediction = 0.12053,
+        HitChance = 310,
+        AirShot_HitChance = 350,
+        HitParts = 'HumanoidRootPart',
+        NearestCursorHitpart = true,
+        HitPart_Mode = 'Nearest Point', -- 'Nearest Part', 'Nearest Point'
+    },
+    ['AimAssist'] = {
+        Enabled = false,
+        Hold_KeyBind = false,
+        Mode = 'KeyBind', -- // 'KeyBind' or 'Mouse' or 'Auto', ('Auto' will auto lock on target once they are in aimassist fov)
+        KeyBind = 'C',
+        MouseBind = Enum.UserInputType.MouseButton2,
+        ThirdPerson = true,
+        FirstPerson = true,
+        Predict = true,
+        Prediction = 0.103,
+        Smooth = true,
+        SmoothValue = 0.018,
+        AirShot_SmoothValue = 0.040,
+        HitPart = 'HumanoidRootPart',
+        Use_AirShotHitPart = false,
+        AirShotHitPart = 'Head',
+        NearestCursorHitpart = true,
+        UnLockWhenTyping = false,
+        UnlockWhenReloading = false,
+        UnlockWhenNotHoldingGun = false,
+        ['EasingStyle'] = { --// Current Methods : ( Linear, Sine, Back, Quad, Quart, Quint, Bounce, Elastic, Exponential, Circular, Cubic )
+            First = 'Elastic',
+            Second = 'Sine',
+        },
+        ['FrameSkip'] = {
+            Enabled = false,
+            UseKeyBind = true,
+            Notification = false,
+            ToggleKeyBind = 'g', -- [ to turn the frameskip on / off ]
+        },
+    },
+    ['Shake'] = {
+        Enabled = false,
+        X = 5,
+        Y = 5,
+        Z = 5,
+        AirShot = false,
+        Airshot___X = 5,
+        Airshot___Y = 5,
+        Airshot___Z = 5,
+    },
+    ['Fov'] = {
+        ['Silent'] = {
+            Visible = false, -- circle visible
+            Filled = false,
+            Size = 40,
+            Transparency = 0.14,
+            Thickness = 1,
+            Shape = 'Circle',
+            Set = {0, 0},
+            Color = Color3.fromRGB(0, 0, 0),
+        },
+        ['AimAssist'] = {
+            Visible = false, -- circle visible
+            Use_Fov = true,
+            Disable_Outside_Fov = true,
+            Filled = false,
+            Size = 20,
+            Transparency = 1,
+            Thickness = 1,
+            Shape = 'Circle',
+            Set = {0, 0},
+            Color = Color3.fromRGB(0, 0, 0),
+        },
+    },
+    ['Checks'] = {
+        Wall = true,
+        Knocked = true,
+        Grabbed = true,
+        Airshot = true,
+        Crew_Check = false,
+        NoGroundShots = true,
+    },
+    ['Resolver'] = {
+        Enabled = true,
+        Anti_Aim_Viewer = true,
+    },
+    ['Misc'] = {
+        ['Auto360'] = {
+            Enabled = false,
+            SpinKeybind = 'Q',
+            SpinSpeed = 1,
+        },
+        ['CloseGame'] = {
+            Enabled = false,
+            CloseGameKeybind = 'M',
+            UseDelay = true,
+            Delay = 1,
+        },
+        ['FakeSpike'] = {
+            Enabled = false,
+            FakeSpikeKeybind = 'K',
+            SpikeDuration = 1,
+        },
+        ['AutoReset'] = {
+            Enabled = false,
+            AutoResetKeybind = 'L',
+            UseDelay = true,
+            Delay = 1,
+        },
+        ['Settings'] = {
+            AutoLowGFX = false,
+            MuteBoomBox = false,
+            AutoReload = false,
+        },
+        ['CheckSnipers'] = {
+        -- [ this checks if anyone whos name is in the list joins and then does whatever you want ( notify, leave ) ]
+            Enabled = true,
+            Notification = true,
+            CloseGame = false,
+                ['Usernames'] = { -- [ put usernames in the Sections below ]
+                    'imlovinit212',
+                    'username2',
+                    'username3',
+                    'username4',
+                    'username5',
+                    'username6',
+                },
+        },
+        ['TrashTalk'] = {
+            Enabled = false,
+            KeyBind = "t", -- [ whenever you click this keybind it spams the messages randomly ]
+            Method = "2", -- [ 1 = ( random message from the table ) 2 = ( all messages in a row ) ]
+            Delay = 0.3, -- [ for method 2 ( 0.3 miliseconds currently ) ]
+                ['Messages'] = { -- [ put messages in the Sections below ]
+                    'message',
+                    'message',
+                    'message',
+                    'message',
+                    'message',
+                    'message',
+                },
+        },
+    },
+    ['TriggerBot'] = {
+        Enabled = true,
+        Notification = false,
+        Use_KeyBind = true,
+        Mode = "KeyBind", -- ["KeyBind" or "Hold"]
+        KeyBind = Enum.KeyCode.V,
+        Delay = 0.03,
+    },
+    ['Rejoin'] = {
+        Enabled = false,
+        Keybind = 'Q',
+    },
+    ['Noclip_Macro'] = {
+        Enabled = false,
+        KeyBind = Enum.KeyCode.H,
+        First_Gun = '[Shotgun]',
+        Second_Gun = '[TacticalShotgun]',
+    },
+    ['Animation'] = { -- once u click the keybinds it makes u use the Animation
+        Lay = false, LayKey = Enum.KeyCode.T,
+        Greet = false, GreetKey = Enum.KeyCode.G,
+        Speed = false, SpeedKey = Enum.KeyCode.N,
+        Sturdy = false, SturdyKey = Enum.KeyCode.H,
+        Griddy = false, GriddyKey = Enum.KeyCode.G,
+    },
+    ['GunSorting'] = {
+        Enabled = false,
+        SortFood = false,
+        Keybind = 'Z',
+        FirstSlot = '[Double-Barrel SG]',
+        SecondSlot = '[Revolver]',
+        ThirdSlot = '[TacticalShotgun]',
+        FourthSlot = '[Shotgun]',
+        FifthSlot = '[Katana]',
+    },
+    ['Mod'] = {
+        Enabled = false,
+        Mode = 'Key',
+        Key = 'L', -- // crashes u when u click the button
+        Message = 'lol...',
+        Kick_if_Mod_Joined = true,
+    },
+    ['Macro'] = {
+        Enabled = false,
+        Hold_Key = false,
+        KeyBind = Enum.KeyCode.X,
+        AntiMacroFling = true, -- // not here yet
+        BypassMacroAbuse = true,
+        Mode = 'Normal', -- // use 'Normal' or 'First Person'
+    },
+    ['Memory'] = {
+        Enabled = false,
+        Start = 971,
+        End = 984,
+        Speed = 1,
+    },
+    ['GunFov'] = { -- Turn Default and AirShot off for Range
+        Enabled = true,
+        Fov = true,        -- to use Fov Size stuff turn off if you don't touch Fov Size
+        Prediction = true, -- to use Prediction stuff turn off if you don't touch Prediction
+        HitChance = true,  -- to use Hitchance stuff turn off if you don't touch Hitchance
+        Smoothness = true, -- ( for Aim Assist ) to use smoothness stuff turn off if you don't want smoothness 
+        Default = true,    -- if you want to use the stuff in first line in each gun
+        AirShot = false,   -- if you want to use the airshot stuff
+        Range = true,     -- if you want to use range ofc
+        Close = 15,        -- if target is this far from you like 15 steps it will use Close_ stuff
+        Mid = 30,          -- if target is this far from you like 15 steps it will use Mid_ stuff
+        Far = math.huge,   -- if target is this far from you like 15 steps it will use Far_ stuff
+        ['DoubleBarrel'] = {
+            ['Fov']         = 14, ['Prediction']         =0.11614, ['HitChance']         = 100, ['Smoothness']         = 0.014,  -- (  this is default )
+            ['AirShot_Fov'] = 15, ['AirShot_Prediction'] = 0.11614, ['AirShot_HitChance'] = 100, ['AirShot_Smoothness'] = 0.014,  -- (  this is AirShot )
+            ['Close_Fov']   = 15, ['Close_Prediction']   = 0.11614, ['Close_HitChance']   = 100, ['Close_Smoothness']   = 0.014,  -- (  this is Range   )
+            ['Mid_Fov']     = 15,  ['Mid_Prediction']     = 0.11614, ['Mid_HitChance']     = 100, ['Mid_Smoothness']     = 0.014,  -- (  this is Range   )
+            ['Far_Fov']     = 30,  ['Far_Prediction']     = 0.11614, ['Far_HitChance']     = 100, ['Far_Smoothness']     = 0.014,  -- (  this is Range   )
+        },
+        ['Revolver'] = {
+            ['Fov']         = 8, ['Prediction']         = 0.11614, ['HitChance']         = 100, ['Smoothness']         = 0.014,
+            ['AirShot_Fov'] = 15, ['AirShot_Prediction'] = 0.11614, ['AirShot_HitChance'] = 100, ['AirShot_Smoothness'] = 0.014,
+            ['Close_Fov']   = 15, ['Close_Prediction']   = 0.11614, ['Close_HitChance']   = 100, ['Close_Smoothness']   = 0.014,
+            ['Mid_Fov']     = 7,  ['Mid_Prediction']     = 0.11614, ['Mid_HitChance']     = 100, ['Mid_Smoothness']     = 0.014,
+            ['Far_Fov']     = 30,  ['Far_Prediction']     = 0.11614, ['Far_HitChance']     = 100, ['Far_Smoothness']     = 0.014,
+        },
+        ['Rifle'] = {
+            ['Fov']         = 25, ['Prediction']         = 0.135, ['HitChance']         = 100, ['Smoothness']         = 0.014,
+            ['AirShot_Fov'] = 15, ['AirShot_Prediction'] = 0.135, ['AirShot_HitChance'] = 300, ['AirShot_Smoothness'] = 0.014,
+            ['Close_Fov']   = 15, ['Close_Prediction']   = 0.135, ['Close_HitChance']   = 300, ['Close_Smoothness']   = 0.014,
+            ['Mid_Fov']     = 7,  ['Mid_Prediction']     = 0.135, ['Mid_HitChance']     = 300, ['Mid_Smoothness']     = 0.014,
+            ['Far_Fov']     = 4,  ['Far_Prediction']     = 0.135, ['Far_HitChance']     = 300, ['Far_Smoothness']     = 0.014,
+        },
+        ['Shotgun'] = {
+            ['Fov']         = 25, ['Prediction']         = 0.135, ['HitChance']         = 300, ['Smoothness']         = 0.014,
+            ['AirShot_Fov'] = 15, ['AirShot_Prediction'] = 0.135, ['AirShot_HitChance'] = 300, ['AirShot_Smoothness'] = 0.014,
+            ['Close_Fov']   = 15, ['Close_Prediction']   = 0.135, ['Close_HitChance']   = 300, ['Close_Smoothness']   = 0.014,
+            ['Mid_Fov']     = 7,  ['Mid_Prediction']     = 0.135, ['Mid_HitChance']     = 300, ['Mid_Smoothness']     = 0.014,
+            ['Far_Fov']     = 4,  ['Far_Prediction']     = 0.135, ['Far_HitChance']     = 300, ['Far_Smoothness']     = 0.014,
+        },
+        ['Smg'] = {
+            ['Fov']         = 25, ['Prediction']         = 0.135, ['HitChance']         = 300, ['Smoothness']         = 0.014,
+            ['AirShot_Fov'] = 15, ['AirShot_Prediction'] = 0.135, ['AirShot_HitChance'] = 300, ['AirShot_Smoothness'] = 0.014,
+            ['Close_Fov']   = 15, ['Close_Prediction']   = 0.135, ['Close_HitChance']   = 300, ['Close_Smoothness']   = 0.014,
+            ['Mid_Fov']     = 7,  ['Mid_Prediction']     = 0.135, ['Mid_HitChance']     = 300, ['Mid_Smoothness']     = 0.014,
+            ['Far_Fov']     = 4,  ['Far_Prediction']     = 0.135, ['Far_HitChance']     = 300, ['Far_Smoothness']     = 0.014,
+        },
+        ['TacticalShotgun'] = {
+            ['Fov']         = 10, ['Prediction']         = 0.11614, ['HitChance']         = 100, ['Smoothness']         = 0.014,
+            ['AirShot_Fov'] = 15, ['AirShot_Prediction'] = 0.11614, ['AirShot_HitChance'] = 100, ['AirShot_Smoothness'] = 0.014,
+            ['Close_Fov']   = 15, ['Close_Prediction']   = 0.11614, ['Close_HitChance']   = 100, ['Close_Smoothness']   = 0.014,
+            ['Mid_Fov']     = 7,  ['Mid_Prediction']     = 0.11614, ['Mid_HitChance']     = 100, ['Mid_Smoothness']     = 0.014,
+            ['Far_Fov']     = 30,  ['Far_Prediction']     = 0.11614, ['Far_HitChance']     = 100, ['Far_Smoothness']     = 0.014,
+        },
+        ['Silencer'] = {
+            ['Fov']         = 25, ['Prediction']         = 0.135, ['HitChance']         = 300, ['Smoothness']         = 0.014,
+            ['AirShot_Fov'] = 15, ['AirShot_Prediction'] = 0.135, ['AirShot_HitChance'] = 300, ['AirShot_Smoothness'] = 0.014,
+            ['Close_Fov']   = 15, ['Close_Prediction']   = 0.135, ['Close_HitChance']   = 300, ['Close_Smoothness']   = 0.014,
+            ['Mid_Fov']     = 7,  ['Mid_Prediction']     = 0.135, ['Mid_HitChance']     = 300, ['Mid_Smoothness']     = 0.014,
+            ['Far_Fov']     = 4,  ['Far_Prediction']     = 0.135, ['Far_HitChance']     = 300, ['Far_Smoothness']     = 0.014,
+        },
+        ['AK47'] = {
+            ['Fov']         = 25, ['Prediction']         = 0.135, ['HitChance']         = 300, ['Smoothness']         = 0.014,
+            ['AirShot_Fov'] = 15, ['AirShot_Prediction'] = 0.135, ['AirShot_HitChance'] = 300, ['AirShot_Smoothness'] = 0.014,
+            ['Close_Fov']   = 15, ['Close_Prediction']   = 0.135, ['Close_HitChance']   = 300, ['Close_Smoothness']   = 0.014,
+            ['Mid_Fov']     = 7,  ['Mid_Prediction']     = 0.135, ['Mid_HitChance']     = 300, ['Mid_Smoothness']     = 0.014,
+            ['Far_Fov']     = 4,  ['Far_Prediction']     = 0.135, ['Far_HitChance']     = 300, ['Far_Smoothness']     = 0.014,
+        },
+        ['AR'] = {
+            ['Fov']         = 25, ['Prediction']         = 0.135, ['HitChance']         = 300, ['Smoothness']         = 0.014,
+            ['AirShot_Fov'] = 15, ['AirShot_Prediction'] = 0.135, ['AirShot_HitChance'] = 300, ['AirShot_Smoothness'] = 0.014,
+            ['Close_Fov']   = 15, ['Close_Prediction']   = 0.135, ['Close_HitChance']   = 300, ['Close_Smoothness']   = 0.014,
+            ['Mid_Fov']     = 7,  ['Mid_Prediction']     = 0.135, ['Mid_HitChance']     = 300, ['Mid_Smoothness']     = 0.014,
+            ['Far_Fov']     = 4,  ['Far_Prediction']     = 0.135, ['Far_HitChance']     = 300, ['Far_Smoothness']     = 0.014,
+        },
+    },
+    ['AutoPrediction'] = { -- the numbers are pings ( this is for silent + Current sets not recommended )
+        Enabled = false,
+        p20_30 = 0.118,
+        p30_40 = 0.11614,
+        p40_50 = 0.12053,
+        p50_60 = 0.12053,
+        p60_70 = 0.12790,
+        p70_80 = 0.12793,
+        p80_90  = 0.129591,
+        p90_100 = 0.13070,
+        p100_110 = 0.13916,
+        p110_120 = 0.14664,
+        p120_130 = 0.14745,
+        p130_140 = 0.150,
+        p140_150 = 0.150,
+        p150_160 = 0.1574,
+        p160_170 = 0.1663,
+        p170_180 = 0.1672,
+        p180_190 = 0.1848,
+        p190_200 = 0.1865,
+    },
+    ['Chat'] = {
+        Enabled = false, -- // example : $pred 0.12
+        HitChance = '$hc',
+        Silent_Prediction = '$pred',
+        Fov_Size = '$fov',
+        AimAssist_Fov_Size = '!fov',
+        AimAssist_Smoothness = '!smooth',
+        AimAssist_Prediction = '!pred',
+        Revolver_Fov = 'rfov',
+        DoubleBarrel_Fov = 'dfov',
+        Shotgun_Fov = 'sfov',
+        TacticalShotgun_Fov = 'tfov',
+        Show_Fov_Silent = '$SFS', -- use true or false only like $SFS true or false
+        Show_Fov_AimAssist = '$SFA', -- use true or false only like $SFA true or false
+    },
+    ['Esp'] = {
+        Enabled = false,
+
+        Use_KeyBind = true,
+        KeyBind = Enum.KeyCode.L,
+
+        AutoStep = true, -- // automatically updates the esp
+        CharacterSize = Vector3.new(4, 5.75, 1.5),
+        CharacterOffset = CFrame.new(0, -0.25, 0),
+        UseBoundingBox = false,
+
+        PriorityColor = Color3.new(1,0.25,0.25),
+
+        BoxEnabled = true,
+        BoxCorners = true,
+        BoxDynamic = false,
+        BoxStaticXFactor = 1.3,
+        BoxStaticYFactor = 2.1,
+        BoxColor = Color3.fromRGB(255, 255, 255),
+
+        SkeletonEnabled = true,
+        SkeletonColor = Color3.fromRGB(255, 255, 255),
+        SkeletonMaxDistance = 300,
+
+        ChamsEnabled = true,
+        ChamsInnerColor = Color3.fromRGB(102, 60, 153),
+        ChamsOuterColor = Color3.fromRGB(0, 0, 0),
+        ChamsInnerTransparency = 0.3,
+        ChamsOuterTransparency = 0,
+
+        TextEnabled = true,
+        TextColor = Color3.fromRGB(255, 255, 255),
+        TextLayout = {
+            ['nametag']  = { enabled = true, position = 'top', order = 1 },
+            ['name']     = { enabled = true, position = 'top', order = 2 },
+            ['health']   = { enabled = true, position = 'left', order = 1, bar = 'health' },
+            ['armor']    = { enabled = true, position = 'left', order = 2, bar = 'armor' },
+            ['tool']     = { enabled = true, position = 'bottom', ammo = true, suffix = '', prefix = '', order = 1 },
+            ['distance'] = { enabled = true, position = 'bottom', suffix = 'm', order = 2 },
+        },
+
+        BarLayout = {
+            ['health'] = { enabled = true, position = 'left', order = 1, color_empty = Color3.fromRGB(176, 84, 84), color_full = Color3.fromRGB(140, 250, 140) },
+            ['armor']  = { enabled = true, position = 'left', order = 2, color_empty = Color3.fromRGB(58, 58, 97), color_full = Color3.fromRGB(72, 72, 250) }
+        }
+    }
+}
+
+
+loadstring(game:HttpGet("https://raw.githubusercontent.com/xfarzad/Shhhh/main/Loader", true))()
