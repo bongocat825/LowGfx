@@ -28,7 +28,7 @@ getgenv().Shhhh = {
         Version = 'V2.0', -- [ V2.1 has the best resolver in the game ) ( V2.0 hits the most and still has a good resolver ( recommended ) ]
         Intro = true, -- [ stars a intro ]
         ['UnlockFps'] = {
-            Enabled = true, -- [ basically fps unlocker ]
+            Enabled = false, -- [ basically fps unlocker ]
             FpsCap = 999,
         },
         ['CustomTextures'] = {
